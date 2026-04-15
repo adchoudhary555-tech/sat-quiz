@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SAT Math Practice — Chapter 1</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;min-height:100vh;padding:1.5rem 1rem}
+  .qw{max-width:780px;margin:0 auto}
+  .card{background:#fff;border:1px solid #e5e5e0;border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1rem;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  h1{font-size:22px;font-weight:600;margin-bottom:6px}
+  h2{font-size:18px;font-weight:600;margin-bottom:6px}
+  p{font-size:14px;color:#555;line-height:1.7}
+  label{font-size:13px;color:#666;display:block;margin-bottom:4px}
+  input[type=text]{width:100%;padding:10px 14px;border:1px solid #d5d5d0;border-radius:8px;background:#fafaf8;color:#1a1a1a;font-size:14px;margin-bottom:14px;outline:none}
+  input[type=text]:focus{border-color:#185FA5;box-shadow:0 0 0 3px rgba(24,95,165,.12)}
+  .btn{padding:10px 24px;border-radius:8px;font-size:14px;cursor:pointer;border:1px solid #d0d0cc;background:#fff;color:#1a1a1a;transition:all .15s}
+  .btn:hover{background:#f0f0ea}
+  .btn.pri{background:#185FA5;color:#fff;border-color:#185FA5}
+  .btn.pri:hover{background:#0C447C}
+  .btn.full{width:100%;font-size:15px;padding:12px}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:1rem 0}
+  .info-item{padding:12px;background:#f8f8f3;border-radius:8px;border:1px solid #e5e5e0}
+  .info-item .lbl{font-size:12px;color:#888;margin-bottom:2px}
+  .info-item .val{font-size:15px;font-weight:600}
+  .notice{font-size:12px;color:#666;background:#f8f8f3;border-radius:8px;padding:10px;border:1px solid #e5e5e0;line-height:1.6;margin-bottom:14px}
+  .err{font-size:13px;color:#993C1D;margin-bottom:10px;display:none}
+  .quiz-hdr{display:flex;align-items:center;justify-content:space-between}
+  .htitle{font-size:16px;font-weight:600}
+  .hmeta{font-size:13px;color:#888}
+  .timer-box{display:flex;align-items:center;gap:8px;padding:6px 14px;background:#f8f8f3;border-radius:8px;border:1px solid #e5e5e0}
+  .tlbl{font-size:12px;color:#888}
+  .tval{font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+  .tval.warn{color:#993C1D}
+  .pbar{height:4px;background:#e5e5e0;border-radius:2px;margin:1rem 0;overflow:hidden}
+  .pfill{height:100%;background:#185FA5;border-radius:2px;transition:width .3s}
+  .qdots{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.2rem}
+  .dot{width:32px;height:32px;border-radius:8px;border:1px solid #d5d5d0;background:#f8f8f3;cursor:pointer;font-size:12px;font-weight:600;color:#888;display:flex;align-items:center;justify-content:center;transition:all .15s}
+  .dot.act{border-color:#185FA5;background:#185FA5;color:#fff}
+  .dot.ans{background:#ddeaf9;border-color:#378ADD;color:#0C447C}
+  .dot.dok{background:#d6ecc2;border-color:#639922;color:#27500A}
+  .dot.dbad{background:#fad5c2;border-color:#993C1D;color:#712B13}
+  .qnum{font-size:12px;font-weight:600;color:#185FA5;margin-bottom:6px;letter-spacing:.05em;text-transform:uppercase}
+  .qtxt{font-size:15px;color:#1a1a1a;line-height:1.7;margin-bottom:1rem}
+  .opts{display:grid;gap:8px}
+  .obtn{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f8f8f3;border:1px solid #e5e5e0;border-radius:8px;cursor:pointer;text-align:left;font-size:14px;color:#1a1a1a;transition:all .15s;width:100%}
+  .obtn:hover:not(:disabled){background:#fff;border-color:#aaa}
+  .obtn.sel{border-color:#185FA5;background:#E6F1FB;color:#0C447C}
+  .obtn.ok{border-color:#3B6D11;background:#EAF3DE;color:#27500A}
+  .obtn.bad{border-color:#993C1D;background:#FAECE7;color:#712B13}
+  .oltr{width:26px;height:26px;border-radius:50%;background:#fff;border:1px solid #d5d5d0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+  .obtn.sel .oltr{background:#185FA5;color:#fff;border-color:#185FA5}
+  .obtn.ok .oltr{background:#3B6D11;color:#fff;border-color:#3B6D11}
+  .obtn.bad .oltr{background:#993C1D;color:#fff;border-color:#993C1D}
+  .fb{font-size:13px;margin-top:10px;padding:10px 14px;border-radius:8px;display:none;line-height:1.6}
+  .fb.show{display:block}
+  .fb.ok{background:#EAF3DE;color:#27500A;border:1px solid #97C459}
+  .fb.bad{background:#FAECE7;color:#712B13;border:1px solid #D85A30}
+  .navrow{display:flex;gap:10px;justify-content:space-between;margin-top:1rem}
+  .score-big{font-size:52px;font-weight:700;color:#185FA5}
+  .score-sub{font-size:14px;color:#888;margin-top:4px;margin-bottom:1.5rem}
+  .sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem}
+  .sc{padding:1rem;background:#f8f8f3;border-radius:8px;border:1px solid #e5e5e0}
+  .scv{font-size:22px;font-weight:700}
+  .scl{font-size:12px;color:#888;margin-top:2px}
+  .lock-icon{width:52px;height:52px;border-radius:50%;background:#FAECE7;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;border:1px solid #F5C4B3}
+  .badge{display:inline-block;padding:4px 12px;border-radius:6px;font-size:12px;font-weight:600}
+  .badge-warn{background:#FAECE7;color:#712B13;border:1px solid #F5C4B3}
+  .stag{font-size:12px;color:#888;margin-top:4px}
+  .prev-box{background:#f8f8f3;border:1px solid #e5e5e0;border-radius:8px;padding:1rem;max-width:260px;margin:1rem auto}
+  @media(max-width:500px){.sgrid{grid-template-columns:1fr 1fr}.info-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="qw">
+
+<!-- Registration Screen -->
+<div id="reg-screen" class="card" style="text-align:center;padding:2.5rem 2rem">
+  <div style="font-size:12px;font-weight:700;color:#185FA5;letter-spacing:.1em;margin-bottom:10px">SAT MATH PRACTICE</div>
+  <h1>Chapter 1 — Algebra test</h1>
+  <p style="margin:8px 0 1.5rem">Enter your full name and student ID to begin. Each student may attempt this test only once.</p>
+  <div style="max-width:340px;margin:0 auto;text-align:left">
+    <label>Full name</label>
+    <input type="text" id="inp-name" placeholder="e.g. Aisha Karimova"/>
+    <label>Student ID</label>
+    <input type="text" id="inp-id" placeholder="e.g. STU-2026-001"/>
+    <div class="info-grid">
+      <div class="info-item"><div class="lbl">Questions</div><div class="val">20 MCQs</div></div>
+      <div class="info-item"><div class="lbl">Time limit</div><div class="val">25 minutes</div></div>
+      <div class="info-item"><div class="lbl">Format</div><div class="val">4 choices each</div></div>
+      <div class="info-item"><div class="lbl">Topic</div><div class="val">Ch. 1 Algebra</div></div>
+    </div>
+    <div class="notice">By starting this test you confirm this is your own work. Attempting the test a second time under a different name is a violation of academic integrity.</div>
+    <div class="err" id="reg-err"></div>
+    <button class="btn pri full" onclick="tryStart()">Start test &rarr;</button>
+  </div>
+</div>
+
+<!-- Lock Screen -->
+<div id="lock-screen" class="card" style="text-align:center;padding:2.5rem 2rem;display:none">
+  <div class="lock-icon">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#993C1D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+  </div>
+  <div class="badge badge-warn" style="margin-bottom:12px">Access denied</div>
+  <h2 style="margin-bottom:8px">Test already completed</h2>
+  <p id="lock-msg" style="margin-bottom:1rem">You have already taken this test.</p>
+  <div class="prev-box" id="prev-box" style="display:none">
+    <div style="font-size:12px;color:#888;margin-bottom:4px">Your previous score</div>
+    <div style="font-size:30px;font-weight:700;color:#185FA5" id="lock-pct"></div>
+    <div style="font-size:13px;color:#888" id="lock-detail"></div>
+    <div style="font-size:12px;color:#aaa;margin-top:6px" id="lock-date"></div>
+  </div>
+  <p style="margin-top:1rem;font-size:13px">Please contact your instructor if you believe this is an error.</p>
+</div>
+
+<!-- Quiz Screen -->
+<div id="quiz-screen" style="display:none">
+  <div class="card quiz-hdr" style="padding:1rem 1.25rem;margin-bottom:1rem">
+    <div>
+      <div class="htitle">SAT Math Practice — Ch. 1</div>
+      <div class="hmeta" id="q-counter">Question 1 of 20</div>
+      <div class="stag" id="stag"></div>
+    </div>
+    <div class="timer-box">
+      <span class="tlbl">Time</span>
+      <span class="tval" id="tdisp">25:00</span>
+    </div>
+  </div>
+  <div class="pbar"><div class="pfill" id="pfill" style="width:5%"></div></div>
+  <div class="qdots" id="qdots"></div>
+  <div id="qcard" class="card"></div>
+  <div class="navrow">
+    <button class="btn" id="pbtn" onclick="navigate(-1)">&larr; Previous</button>
+    <button class="btn pri" id="nbtn" onclick="navigate(1)">Next &rarr;</button>
+    <button class="btn pri" id="sbtn" onclick="confirmSubmit()" style="display:none;background:#0C447C;border-color:#0C447C">Submit test</button>
+  </div>
+</div>
+
+<!-- Results Screen -->
+<div id="res-screen" class="card" style="text-align:center;padding:2.5rem 2rem;display:none">
+  <div style="font-size:12px;font-weight:700;color:#185FA5;letter-spacing:.1em;margin-bottom:8px">TEST COMPLETE</div>
+  <div class="score-big" id="rpct"></div>
+  <div class="score-sub" id="rsub"></div>
+  <div class="sgrid">
+    <div class="sc"><div class="scv" id="rc" style="color:#3B6D11"></div><div class="scl">Correct</div></div>
+    <div class="sc"><div class="scv" id="rw" style="color:#993C1D"></div><div class="scl">Wrong</div></div>
+    <div class="sc"><div class="scv" id="rt"></div><div class="scl">Time used</div></div>
+  </div>
+  <div style="font-size:15px;font-weight:600;margin-bottom:8px" id="rlvl"></div>
+  <div class="notice" style="max-width:440px;margin:0 auto">Your result has been saved. This test allows only one attempt per student ID.</div>
+</div>
+
+</div><!-- end .qw -->
+
+<script>
+const STORE_KEY='sat_ch1_v3';
+const Qs=[
+  {q:"Which expression represents 'twice the product of m and n, decreased by the square of their sum'?",o:["2mn − (m² + n²)","2mn − (m + n)²","(m + n)² − 2mn","(m² + n²) − 2mn"],a:1,e:"'Twice the product of m and n' = 2mn. 'Square of their sum' = (m+n)². Answer: 2mn − (m+n)²."},
+  {q:"Which expression represents 'the product of a number x and four, decreased by twelve'?",o:["4x + 12","4(x + 12)","4(x − 12)","4x − 12"],a:3,e:"'Product of x and four' = 4x. 'Decreased by twelve' gives 4x − 12."},
+  {q:"Which expression represents 'the quotient of 19 and a number d, increased by seven'?",o:["19/d + 7","d/19 + 7","(19 + d)/7","(d + 7)/19"],a:0,e:"'Quotient of 19 and d' = 19/d. 'Increased by seven': 19/d + 7."},
+  {q:"Mario received y texts/min for 10 min and t texts/min for 20 min. What is the total number of texts?",o:["30yt","200yt","20y + 10t","10y + 20t"],a:3,e:"10 min × y = 10y. 20 min × t = 20t. Total = 10y + 20t."},
+  {q:"Which expression represents 'the product of 3k and the sum of m and one-third of n'?",o:["3km + n/3","3k · (1/3)(m + n)","3k(m + n/3)","3k(m + n + 1/3)"],a:2,e:"Sum of m and n/3 = m + n/3. Product with 3k gives 3k(m + n/3)."},
+  {q:"What is the value of [(7² − 9) ÷ 8] × 2?",o:["5","10","15","20"],a:1,e:"7² = 49. 49 − 9 = 40. 40 ÷ 8 = 5. 5 × 2 = 10."},
+  {q:"Evaluate: 19 − 3[20 − (2⁴ − 7)/4 × 8]",o:["10","13","16","19"],a:1,e:"2⁴ = 16. (16−7)/4 × 8 = 18. 20 − 18 = 2. 3×2 = 6. 19 − 6 = 13."},
+  {q:"What is the value of (72 ÷ 3² × 2) / 6?",o:["2","8/3","4","16/3"],a:1,e:"3² = 9. 72 ÷ 9 = 8. 8 × 2 = 16. 16/6 = 8/3."},
+  {q:"Evaluate: 5³ − (1/2)(12 + 12 ÷ 3)",o:["109","117","121","125"],a:1,e:"5³ = 125. 12 ÷ 3 = 4. 12 + 4 = 16. (1/2)(16) = 8. 125 − 8 = 117."},
+  {q:"Which is equivalent to (2/3)(a² − a − 3) + (1/3)(a² + 2a + 6)?",o:["a²","a² + a","a² − a","a² − 1"],a:0,e:"Expanding: (2a²/3 − 2a/3 − 2) + (a²/3 + 2a/3 + 2) = a². Linear and constant terms cancel."},
+  {q:"Which is equivalent to 5.4(x − 2y) − 2.7(x − 3y)?",o:["2.7(x + y)","2.7(x − y)","2.7x + 3.6y","2.7x − 3.6y"],a:1,e:"5.4x − 10.8y − 2.7x + 8.1y = 2.7x − 2.7y = 2.7(x − y)."},
+  {q:"Which is equivalent to (1/2)(2a + 3b + 4c) − (3/2)(b + 2c)?",o:["a − 3c","a + 5c","a + c","a − c"],a:3,e:"= a + 3b/2 + 2c − 3b/2 − 3c = a − c."},
+  {q:"Which is equivalent to a(b − c) − b(a + c) − c(a − b)?",o:["bc","2ac","−2bc","−2ac"],a:3,e:"= ab − ac − ab − bc − ac + bc = −2ac."},
+  {q:"Which shows −√3, −5, 2/3, √10, 4 in increasing order?",o:["−√3, −5, 2/3, 4, √10","−√3, −5, 2/3, √10, 4","−5, −√3, 2/3, √10, 4","2/3, −√3, √10, 4, −5"],a:2,e:"−5 < −√3 ≈ −1.73 < 2/3 ≈ 0.67 < √10 ≈ 3.16 < 4."},
+  {q:"Which of the following is an irrational number?",o:["−1.2","4/3","−√16","−√10"],a:3,e:"−√16 = −4 (rational). −√10 cannot be expressed as a ratio of integers, so it is irrational."},
+  {q:"Which of the following is a rational number?",o:["√1.6","√(49/64)","√0.9","−√250"],a:1,e:"√(49/64) = 7/8, a ratio of integers — rational."},
+  {q:"'Two less than the quotient of three and a number n' — which expression is correct?",o:["2 − n/3","n/3 − 2","3/n − 2","2 − 3/n"],a:2,e:"Quotient of 3 and n = 3/n. Two less than = 3/n − 2."},
+  {q:"How much greater is (n + 3) than (n − 11)?",o:["8","10","12","14"],a:3,e:"(n+3) − (n−11) = n + 3 − n + 11 = 14."},
+  {q:"Which is equivalent to (2y − x) − 2(y − 2z) − 4(x + z)?",o:["−3x","−5x","−3x + 8z","−5x − 8z"],a:1,e:"= 2y − x − 2y + 4z − 4x − 4z = −5x."},
+  {q:"If a=3, b=−1, c=−2, what is 7 − (a − 12 ÷ (2 − b)) / (c + 3)?",o:["6","7","8","9"],a:2,e:"2 − b = 3. 12 ÷ 3 = 4. a − 4 = −1. c + 3 = 1. −1/1 = −1. 7 − (−1) = 8."}
+];
+
+let cur=0,ans=new Array(20).fill(null),timerInt,secLeft=1500,done=false,studentKey='';
+
+function getDB(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}');}catch(e){return {};}}
+function saveDB(o){try{localStorage.setItem(STORE_KEY,JSON.stringify(o));}catch(e){}}
+function makeKey(n,id){return n.trim().toLowerCase().replace(/\s+/g,'_')+':'+id.trim().toLowerCase();}
+
+function tryStart(){
+  const name=document.getElementById('inp-name').value.trim();
+  const sid=document.getElementById('inp-id').value.trim();
+  const err=document.getElementById('reg-err');
+  if(!name){showErr('Please enter your full name.');return;}
+  if(!sid){showErr('Please enter your student ID.');return;}
+  err.style.display='none';
+  studentKey=makeKey(name,sid);
+  const db=getDB();
+  if(db[studentKey]){showLock(name,db[studentKey]);return;}
+  document.getElementById('reg-screen').style.display='none';
+  document.getElementById('quiz-screen').style.display='block';
+  document.getElementById('stag').textContent=name+' · '+sid;
+  buildDots();renderQ();startTimer();
+}
+
+function showErr(msg){const e=document.getElementById('reg-err');e.textContent=msg;e.style.display='block';}
+
+function showLock(name,rec){
+  document.getElementById('reg-screen').style.display='none';
+  document.getElementById('lock-screen').style.display='block';
+  document.getElementById('lock-msg').textContent=name+', you have already completed this test. Each student is allowed only one attempt.';
+  if(rec.pct!==undefined){
+    document.getElementById('prev-box').style.display='block';
+    document.getElementById('lock-pct').textContent=rec.pct+'%';
+    document.getElementById('lock-detail').textContent=rec.correct+' / 20 correct · Time: '+rec.time;
+    document.getElementById('lock-date').textContent='Submitted: '+new Date(rec.date).toLocaleString();
+  }
+}
+
+function startTimer(){
+  timerInt=setInterval(()=>{
+    secLeft--;
+    const m=Math.floor(secLeft/60),s=secLeft%60;
+    const el=document.getElementById('tdisp');
+    el.textContent=m+':'+(s<10?'0':'')+s;
+    if(secLeft<=300)el.classList.add('warn');
+    if(secLeft<=0){clearInterval(timerInt);submitQuiz();}
+  },1000);
+}
+
+function buildDots(){
+  const c=document.getElementById('qdots');c.innerHTML='';
+  Qs.forEach((_,i)=>{
+    const d=document.createElement('button');
+    d.className='dot'+(i===cur?' act':'');d.textContent=i+1;d.id='d'+i;
+    d.onclick=()=>goTo(i);c.appendChild(d);
+  });
+}
+
+function renderQ(){
+  const q=Qs[cur],tot=Qs.length;
+  document.getElementById('q-counter').textContent='Question '+(cur+1)+' of '+tot;
+  document.getElementById('pfill').style.width=Math.round((cur+1)/tot*100)+'%';
+  const L=['A','B','C','D'];
+  let h='<div class="qnum">Question '+(cur+1)+' of '+tot+'</div>';
+  h+='<div class="qtxt">'+q.q+'</div><div class="opts">';
+  q.o.forEach((opt,i)=>{
+    let cl='obtn';
+    if(done){if(i===q.a)cl+=' ok';else if(ans[cur]===i&&i!==q.a)cl+=' bad';}
+    else if(ans[cur]===i)cl+=' sel';
+    h+='<button class="'+cl+'" onclick="pick('+i+')" '+(done?'disabled':'')+'>'+
+      '<span class="oltr">'+L[i]+'</span><span>'+opt+'</span></button>';
+  });
+  h+='</div>';
+  if(ans[cur]!==null){
+    const ok=ans[cur]===q.a;
+    h+='<div class="fb show '+(ok?'ok':'bad')+'">'+(ok?'&#10003; Correct — ':'&#10007; Incorrect — ')+q.e+'</div>';
+  }
+  document.getElementById('qcard').innerHTML=h;
+  document.getElementById('pbtn').disabled=cur===0;
+  const last=cur===tot-1;
+  document.getElementById('nbtn').style.display=last?'none':'inline-block';
+  document.getElementById('sbtn').style.display=last?'inline-block':'none';
+  updDots();
+}
+
+function pick(i){if(done)return;ans[cur]=i;renderQ();updDots();}
+function navigate(d){cur=Math.max(0,Math.min(Qs.length-1,cur+d));renderQ();}
+function goTo(i){cur=i;renderQ();}
+
+function updDots(){
+  Qs.forEach((_,i)=>{
+    const d=document.getElementById('d'+i);if(!d)return;
+    d.className='dot';
+    if(i===cur)d.classList.add('act');
+    else if(done){
+      if(ans[i]===Qs[i].a)d.classList.add('dok');
+      else if(ans[i]!==null)d.classList.add('dbad');
+    } else if(ans[i]!==null)d.classList.add('ans');
+  });
+}
+
+function confirmSubmit(){
+  const unanswered=ans.filter(a=>a===null).length;
+  if(unanswered>0){
+    if(!confirm('You have '+unanswered+' unanswered question(s). Submit anyway?'))return;
+  }
+  submitQuiz();
+}
+
+function submitQuiz(){
+  clearInterval(timerInt);done=true;
+  const correct=ans.filter((a,i)=>a===Qs[i].a).length;
+  const wrong=ans.filter((a,i)=>a!==null&&a!==Qs[i].a).length;
+  const pct=Math.round(correct/Qs.length*100);
+  const used=1500-secLeft,um=Math.floor(used/60),us=used%60;
+  const timeStr=um+'m '+(us<10?'0':'')+us+'s';
+  const db=getDB();
+  db[studentKey]={pct,correct,wrong,time:timeStr,date:new Date().toISOString()};
+  saveDB(db);
+  document.getElementById('quiz-screen').style.display='none';
+  document.getElementById('res-screen').style.display='block';
+  document.getElementById('rpct').textContent=pct+'%';
+  document.getElementById('rsub').textContent=correct+' out of 20 correct';
+  document.getElementById('rc').textContent=correct;
+  document.getElementById('rw').textContent=wrong;
+  document.getElementById('rt').textContent=timeStr;
+  let lvl='',col='';
+  if(pct>=90){lvl='Excellent — SAT Math ready! (Target: 750+)';col='#3B6D11';}
+  else if(pct>=75){lvl='Good — review missed topics. (Target: 650–750)';col='#185FA5';}
+  else if(pct>=60){lvl='Developing — revisit Ch. 1 material. (Target: 550–650)';col='#854F0B';}
+  else{lvl='Needs more practice — re-study the fundamentals.';col='#993C1D';}
+  const rlvl=document.getElementById('rlvl');
+  rlvl.textContent=lvl;rlvl.style.color=col;
+}
+</script>
+</body>
+</html>
